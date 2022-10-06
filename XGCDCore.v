@@ -66,6 +66,9 @@ module XGCDCore #(parameter  WIDTH = 32) (
     reg     [31:0]              r_PRDATA_reg;
     reg     [31:0]              r_PRDATA;
 
+    reg     [31:0]              r_CTRL;
+    reg                         r_IRQ;
+
     wire                        sram_ce_n;
     wire [31:0]                 sram_addr;
     wire [63:0]                 sram_wdata;
@@ -89,6 +92,22 @@ module XGCDCore #(parameter  WIDTH = 32) (
     assign apb_setup            = PSEL & ~PENABLE;
     assign apb_rd_en            = apb_setup & ~PWRITE;
     assign apb_wr_en            = apb_setup & PWRITE;
+
+    always @(posedge CLK or negedge RESETn)
+        if (!RESETn)
+            r_CTRL  <= {32{1'b0}};
+        else if (apb_wr_en && (apb_addr_oft == 10'd1))
+            r_CTRL          <= PWDATA[31:0];
+
+    always @(posedge CLK or negedge RESETn)
+        if (!RESETn)
+            r_IRQ       <= 1'b0;
+        else begin
+            if (apb_wr_en && (apb_addr_oft == 10'd1) & PWDATA[0])
+                r_IRQ   <= 1'b1;
+            else if (apb_wr_en && (apb_addr_oft == 10'd2) & PWDATA[0])
+                r_IRQ   <= 1'b0;
+        end
 
     always @(*)
         case (PADDR[11:2])
@@ -198,7 +217,7 @@ module XGCDCore #(parameter  WIDTH = 32) (
     // IRQ, START_OUT, DONE_OUT
     //
 
-    assign IRQ          = 1'b0;
+    assign IRQ          = r_IRQ;
     assign START_OUT    = 1'b0;
     assign DONE_OUT     = 1'b0;
 
