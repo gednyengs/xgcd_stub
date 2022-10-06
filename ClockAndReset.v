@@ -5,7 +5,7 @@ module ClockAndReset (
     input       wire            PORESETn,
 
     output      wire            CLK,
-    output      wire            RESETn,
+    output      wire            RESETn
 );
 
     wire        CLK;
