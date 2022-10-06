@@ -124,16 +124,7 @@ module XGCDWrapperTop (
 );
 
     // Prevent Linting Messages
-    wire unused =   clk_in_extern           |
-                    clk_in_system           |
-                    reset_n                 |
-                    (|clk_select)           |
-                    (|S_APB_PADDR_RO)       |
-                    S_APB_PSEL_RO           |
-                    S_APB_PENABLE_RO        |
-                    S_APB_PWRITE_RO         |
-                    (|S_APB_PWDATA_RO)      |
-                    (|S_APB_PADDR_255)      |
+    wire unused =  (|S_APB_PADDR_255)      |
                     S_APB_PSEL_255          |
                     S_APB_PENABLE_255       |
                     S_APB_PWRITE_255        |
@@ -193,10 +184,49 @@ module XGCDWrapperTop (
                     S_AXI_RREADY_1279       ;
 
     //
+    // Internal Signals
+    //
+
+    wire            CLK;
+    wire            RESETn;
+
+    //
+    // Clock And Reset Module
+    //
+
+    ClockAndReset u_clk_reset (
+        .EXT_CLK    (clk_in_extern),
+        .SYS_CLK    (clk_in_system),
+        .CLK_SEL    (clk_select),
+        .PORESETn   (reset_n),
+        .CLK        (CLK),
+        .RESETn     (RESETn)
+    );
+
+    assign clk_div_8 = CLK;
+
+    //
+    // RO APB
+    //
+
+    RO u_ro_apb (
+        .CLK        (CLK),
+        .RESETn     (RESETn),
+
+        .PADDR      (S_APB_PADDR_RO),
+        .PSEL       (S_APB_PSEL_RO),
+        .PENABLE    (S_APB_PENABLE_RO),
+        .PWRITE     (S_APB_PWRITE_RO),
+        .PWDATA     (S_APB_PWDATA_RO),
+        .PRDATA     (S_APB_PRDATA_RO),
+        .PREADY     (S_APB_PREADY_RO),
+        .PSLVERR    (S_APB_PSLVERR_RO)
+    );
+
+    //
     // Output Assignments
     //
 
-    assign clk_div_8            = 1'b0;
 
     assign start_out_255        = 1'b0;
     assign start_out_1279       = 1'b0;
@@ -205,10 +235,6 @@ module XGCDWrapperTop (
 
     assign IRQ_255              = 1'b0;
     assign IRQ_1279             = 1'b0;
-
-    assign S_APB_PRDATA_RO      = {32{1'b0}};
-    assign S_APB_PREADY_RO      = 1'b1;
-    assign S_APB_PSLVERR_RO     = 1'b0;
 
     assign S_APB_PRDATA_255     = {32{1'b0}};
     assign S_APB_PREADY_255     = 1'b1;
