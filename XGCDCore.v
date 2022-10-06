@@ -121,13 +121,13 @@ module XGCDCore #(parameter  WIDTH = 32) (
     assign WREADY       = 1'b1;
     assign BID          = 4'h0;
     assign BRESP        = 2'b00;
-    assign BVALID       = 1'b1;
+    assign BVALID       = 1'b0;
     assign ARREADY      = 1'b1;
     assign RID          = 4'h0;
     assign RRESP        = 2'b00;
     assign RLAST        = 1'b1;
     assign RDATA        = {64{1'b0}};
-    assign RVALID       = 1'b1;
+    assign RVALID       = 1'b0;
 
     //
     // IRQ, START_OUT, DONE_OUT
