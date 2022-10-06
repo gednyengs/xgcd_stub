@@ -217,7 +217,7 @@ module XGCDCore #(parameter  WIDTH = 32) (
     // IRQ, START_OUT, DONE_OUT
     //
 
-    assign IRQ          = r_IRQ;
+    assign IRQ          = r_IRQ & r_CTRL[15];
     assign START_OUT    = 1'b0;
     assign DONE_OUT     = 1'b0;
 
