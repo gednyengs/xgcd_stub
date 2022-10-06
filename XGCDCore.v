@@ -112,6 +112,7 @@ module XGCDCore #(parameter  WIDTH = 32) (
     always @(*)
         case (PADDR[11:2])
             10'd0   : r_PRDATA_reg  = 32'h5A5A5A5A;
+            10'd1   : r_PRDATA_reg  = r_CTRL;
             default : r_PRDATA_reg  = {32{1'b0}};
         endcase
 
