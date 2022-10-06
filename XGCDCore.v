@@ -183,7 +183,7 @@ module XGCDCore #(parameter  WIDTH = 32) (
         if (!RESETn)
             r_RDATA     <= {64{1'b0}};
         else if (~sram_ce_n & sram_we_n)
-            case (sram_addr[11:8)
+            case (sram_addr[11:8])
                 4'd0    : r_RDATA <= r_ARG_A[sram_addr[7:3]];
                 4'd1    : r_RDATA <= r_ARG_B[sram_addr[7:3]];
                 default : r_RDATA <= {64{1'b0}};
