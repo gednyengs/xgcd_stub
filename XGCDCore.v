@@ -188,7 +188,6 @@ module XGCDCore #(parameter  WIDTH = 32) (
                 4'd1    : r_RDATA <= r_ARG_B[sram_addr[7:3]];
                 default : r_RDATA <= {64{1'b0}};
             endcase
-        end
 
     assign sram_rdata = r_RDATA;
 
