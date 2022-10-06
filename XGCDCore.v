@@ -97,7 +97,7 @@ module XGCDCore #(parameter  WIDTH = 32) (
         if (!RESETn)
             r_CTRL  <= {32{1'b0}};
         else if (apb_wr_en && (apb_addr_oft == 10'd1))
-            r_CTRL          <= PWDATA[31:0];
+            r_CTRL          <= PWDATA;
 
     always @(posedge CLK or negedge RESETn)
         if (!RESETn)
