@@ -79,6 +79,8 @@ module XGCDCore #(parameter  WIDTH = 32) (
     reg  [63:0]                 r_MemTemp;
     reg  [63:0]                 r_RDATA;
 
+    integer                     i;
+
     //
     // APB
     //
